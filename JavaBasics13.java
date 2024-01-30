@@ -69,9 +69,6 @@ public class JavaBasics13 {
     // Student s1 = new Student();
     // s1.schoolName = "ABC";
     // System.out.println(s1.schoolName);   
-
-    // // code12
-
   }  
 }
 
