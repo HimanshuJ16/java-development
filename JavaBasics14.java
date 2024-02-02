@@ -94,6 +94,45 @@ public class JavaBasics14 {
     }
     return halfPowerSq;
   }
+  
+  public static int tilingProblem(int n) {
+    if(n == 0 || n == 1) {
+      return 1;
+    }
+    return tilingProblem(n-1) + tilingProblem(n-2);
+  }
+
+  public static void removeDuplicates(String str, int idx, StringBuilder newStr, boolean map[]) {
+    if(idx == str.length()) {
+      System.out.println(newStr);
+      return;
+    }
+    char currChar = str.charAt(idx);
+    if(map[currChar-'a'] == true) {
+      removeDuplicates(str, idx+1, newStr, map);
+    } else {
+      map[currChar-'a'] = true;
+      removeDuplicates(str, idx+1, newStr.append(currChar), map);
+    }
+  }
+
+  public static int friendsPairing(int n) {
+    if(n == 0 || n == 1) {
+      return 1;
+    }
+    return friendsPairing(n-1) + (n-1) * friendsPairing(n-2);
+  }
+
+  public static void printBinaryStrings(int n, int lastPlace, String str) {
+    if(n == 0) {
+      System.out.println(str);
+      return;
+    }
+    printBinaryStrings(n-1, 0, str+"0");
+    if(lastPlace == 0) {
+      printBinaryStrings(n-1, 1, str+"1");
+    }
+  }
   public static void main(String[] args) {
     // // code1
     // int n = 25;
@@ -111,7 +150,20 @@ public class JavaBasics14 {
     // System.out.println(lastOccurence(arr, 5, 0));
   
     // // code3
-    System.out.println(power(2, 10));
-    System.out.println(optimizedPower(2, 10));
+    // System.out.println(power(2, 10));
+    // System.out.println(optimizedPower(2, 10));
+
+    // // code4
+    // System.out.println(tilingProblem(3));
+
+    // // code5
+    // String str = "hhimaanshhujjaangggiir";
+    // removeDuplicates(str, 0, new StringBuilder(""), new boolean[26]);
+  
+    // // code6
+    // System.out.println(friendsPairing(3));
+
+    // // code7
+    printBinaryStrings(3, 0, "");
   }
 }
