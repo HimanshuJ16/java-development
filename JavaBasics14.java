@@ -235,7 +235,7 @@ public class JavaBasics14 {
     // System.out.print(countSubstrs(str, 0, n-1, n));
 
     // // assign5
-    int n = 4;
-    towerOfHanoi(n, "A", "B", "C");
+    // int n = 4;
+    // towerOfHanoi(n, "A", "B", "C");
   }
 }
