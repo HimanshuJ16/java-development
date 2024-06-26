@@ -57,11 +57,65 @@ public class JavaBasics20 {
       return false;
    }
 
-   public static void main(String[] args) {
-      if (solveRatMaze(0, 0)) {
-         showPath();
-      } else {
-         System.out.println("There is no path");
+   public static void backtrack(String[] phone, String digits, int index, String current) {
+      if(index == digits.length()) {
+         System.out.println(current);
+         return;
       }
+      for(char c : phone[digits.charAt(index) - '0'].toCharArray()) {
+         backtrack(phone, digits, index + 1, current + c);
+      }
+   }
+
+   static int n = 8;
+   static int[][] moves = {{-2, -1}, {-1, -2}, {1, -2}, {2, -1}, {2, 1}, {1, 2}, {-1, 2}, {-2, 1}};
+
+   static boolean solveKnightTour(int[][] board, int x, int y, int move) {
+      if (move == n * n) {
+         return true;
+      }
+      for(int[] moveDir : moves) {
+         int newX = x + moveDir[0];
+         int newY = y + moveDir[1];
+         if(isValidMove(board, newX, newY)) {
+            board[newX][newY] = move;
+            if(solveKnightTour(board, newX, newY, move + 1)) {
+               return true;
+            }
+            board[newX][newY] = 0;
+         }
+      }
+      return false;
+   }
+
+   static boolean isValidMove(int[][] board, int x, int y) {
+      return x >= 0 && x < n && y >= 0 && y < n && board[x][y] == 0;
+   }
+
+   public static void main(String[] args) {
+      // // code 1 (rat in maze)
+      // if (solveRatMaze(0, 0)) {
+      //    showPath();
+      // } else {
+      //    System.out.println("There is no path");
+      // }
+
+      // // code 2 (phone combination)
+      // String digits = "23";
+      // String[] phone = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+      // backtrack(phone, digits, 0, "");
+
+      // // code 3 (Knight’s Tour)
+      // int[][] board = new int[n][n];
+      // if(!solveKnightTour(board, 0, 0, 1)) {
+      //     System.out.println("Solution does not exist");
+      // }else {
+      //    for(int i = 0; i < n; i++) {
+      //       for (int j = 0; j < n; j++) {
+      //          System.out.print(board[i][j] + " ");
+      //       }
+      //       System.out.println();
+      //    }
+      // }
    }
 }
