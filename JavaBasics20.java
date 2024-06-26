@@ -1,64 +1,67 @@
 public class JavaBasics20 {
+   private static final int N = 4;
 
-static final int N = 4;
+   // Original maze
+   private static int maze[][] = {
+      {1, 0, 0, 0},
+      {1, 1, 0, 1},
+      {0, 1, 0, 0},
+      {1, 1, 1, 1}
+   };
 
-static boolean isValid(int maze[][], int row, int col) {
-    return (row >= 0 && row < N && col >= 0 && col < N && maze[row][col] == 1);
-}
+   // To store the final solution of the maze path
+   private static int[][] sol = new int[N][N];
 
-static boolean findPath(int maze[][], int row, int col, int[][] sol) {
-    // Reached destination
-    if (row == N - 1 && col == N - 1) {
-        sol[row][col] = 1;
-        return true;
-    }
-
-    // Mark current cell as visited
-    sol[row][col] = 1;
-
-    // Try all four directions (right, down, left, up)
-    int[] rowDir = {0, 1, 0, -1};
-    int[] colDir = {1, 0, -1, 0};
-    for (int i = 0; i < 4; i++) {
-        int newRow = row + rowDir[i];
-        int newCol = col + colDir[i];
-
-        if (isValid(maze, newRow, newCol)) {
-            if (findPath(maze, newRow, newCol, sol)) {
-                return true; // Found a path from this point
+   // to display path
+   private static void showPath() {
+      System.out.println("The solution maze:");
+      for(int i = 0; i < N; i++) {
+         for(int j = 0; j < N; j++) {
+            if(sol[i][j] == 1) {
+               System.out.print("1 ");
+            }else {
+               System.out.print("0 ");
             }
-        }
-    }
+         }
+         System.out.println();
+      }
+   }
 
-    sol[row][col] = 0;
-    return false;
-}
-static void printSolution(int sol[][]) {
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            if (sol[i][j] == 1) {
-                System.out.print("1 ");
-            } else {
-                System.out.print("0 ");
-            }
-        }
-        System.out.println();
-    }
-}
-public static void main(String[] args) {
-    int maze[][] = {{1, 0, 0, 0},
-                    {1, 1, 0, 1},
-                    {0, 1, 0, 0},
-                    {1, 1, 1, 1}};
+   // Function to check if a place is inside the maze and has value 1
+   private static boolean isValidPlace(int x, int y) {
+      return x >= 0 && x < N && y >= 0 && y < N && maze[x][y] == 1;
+   }
+   
+   private static boolean solveRatMaze(int x, int y) {
+      // When (x,y) is the bottom right room
+      if (x == N - 1 && y == N - 1) {
+         sol[x][y] = 1;
+         return true;
+      }
+      // Check whether (x,y) is valid or not
+      if (isValidPlace(x, y)) {
+         // Set 1 when it is a valid place
+         sol[x][y] = 1;
+         // Find path by moving in the right direction
+         if (solveRatMaze(x + 1, y)) {
+            return true;
+         }
+         // When the x direction is blocked, go for the bottom direction
+         if (solveRatMaze(x, y + 1)) {
+            return true;
+         }
+         // If both directions are closed, there is no path
+         sol[x][y] = 0;
+         return false;
+      }
+      return false;
+   }
 
-    int[][] sol = new int[N][N];
-
-    if (findPath(maze, 0, 0, sol)) {
-        System.out.println("Solution found!");
-        // Print the solution matrix (optional)
-        printSolution(sol);
-    } else {
-        System.out.println("No path found");
-    }
-}
+   public static void main(String[] args) {
+      if (solveRatMaze(0, 0)) {
+         showPath();
+      } else {
+         System.out.println("There is no path");
+      }
+   }
 }
