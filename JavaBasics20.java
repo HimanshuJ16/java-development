@@ -1,121 +1,127 @@
 public class JavaBasics20 {
-   private static final int N = 4;
-
-   // Original maze
-   private static int maze[][] = {
-      {1, 0, 0, 0},
-      {1, 1, 0, 1},
-      {0, 1, 0, 0},
-      {1, 1, 1, 1}
-   };
-
-   // To store the final solution of the maze path
-   private static int[][] sol = new int[N][N];
-
-   // to display path
-   private static void showPath() {
-      System.out.println("The solution maze:");
-      for(int i = 0; i < N; i++) {
-         for(int j = 0; j < N; j++) {
-            if(sol[i][j] == 1) {
-               System.out.print("1 ");
-            }else {
-               System.out.print("0 ");
-            }
+   public static void printSolution(int sol[][]) {
+      for(int i=0; i<sol.length; i++) {
+         for(int j=0; j<sol.length; j++) {
+            System.out.print(" " + sol[i][j] + " ");
          }
          System.out.println();
       }
    }
-
-   // Function to check if a place is inside the maze and has value 1
-   private static boolean isValidPlace(int x, int y) {
-      return x >= 0 && x < N && y >= 0 && y < N && maze[x][y] == 1;
-   }
    
-   private static boolean solveRatMaze(int x, int y) {
-      // When (x,y) is the bottom right room
-      if (x == N - 1 && y == N - 1) {
+   public static boolean isSafe(int maze[][], int x, int y) {
+      // if (x, y outside maze) return false
+      return (x >= 0 && x < maze.length && y >= 0 && y < maze.length && maze[x][y] == 1);
+   }
+
+   public static boolean solveMaze(int maze[][]) {
+      int N = maze.length;
+      int sol[][] = new int[N][N];
+      if(solveMazeUtil(maze, 0, 0, sol) == false) {
+         System.out.print("Solution doesn't exist");
+         return false;
+      }
+      printSolution(sol);
+      return true;
+   }
+
+   public static boolean solveMazeUtil(int maze[][], int x, int y, int sol[][]) {
+      if(x == maze.length - 1 && y == maze.length - 1 && maze[x][y] == 1) {
          sol[x][y] = 1;
          return true;
       }
-      // Check whether (x,y) is valid or not
-      if (isValidPlace(x, y)) {
-         // Set 1 when it is a valid place
+      // Check if maze[x][y] is valid
+      if(isSafe(maze, x, y) == true) {
+         if(sol[x][y] == 1)
+            return false;
          sol[x][y] = 1;
-         // Find path by moving in the right direction
-         if (solveRatMaze(x + 1, y)) {
+         if(solveMazeUtil(maze, x+1, y, sol))
             return true;
-         }
-         // When the x direction is blocked, go for the bottom direction
-         if (solveRatMaze(x, y + 1)) {
+         if(solveMazeUtil(maze, x, y+1, sol))
             return true;
-         }
-         // If both directions are closed, there is no path
          sol[x][y] = 0;
          return false;
       }
       return false;
    }
 
-   public static void backtrack(String[] phone, String digits, int index, String current) {
-      if(index == digits.length()) {
-         System.out.println(current);
+   final static char[][] L = {{},{},{'a','b','c'},{'d','e','f'},{'g','h','i'},{'j','k','l'},{'m','n','o'},{'p','q','r','s'},{'t','u','v'},{'w','x','y','z'}};
+   
+   public static void letterCombinations(String D) {
+      int len = D.length();
+      if(len == 0) {
+         System.out.println("");
          return;
       }
-      for(char c : phone[digits.charAt(index) - '0'].toCharArray()) {
-         backtrack(phone, digits, index + 1, current + c);
-      }
+      bfs(0, len, new StringBuilder(), D);
    }
-
-   static int n = 8;
-   static int[][] moves = {{-2, -1}, {-1, -2}, {1, -2}, {2, -1}, {2, 1}, {1, 2}, {-1, 2}, {-2, 1}};
-
-   static boolean solveKnightTour(int[][] board, int x, int y, int move) {
-      if (move == n * n) {
-         return true;
-      }
-      for(int[] moveDir : moves) {
-         int newX = x + moveDir[0];
-         int newY = y + moveDir[1];
-         if(isValidMove(board, newX, newY)) {
-            board[newX][newY] = move;
-            if(solveKnightTour(board, newX, newY, move + 1)) {
-               return true;
-            }
-            board[newX][newY] = 0;
+   
+   public static void bfs(int pos, int len, StringBuilder sb, String D) {
+      if(pos == len) {
+         System.out.println(sb.toString());
+      } else {
+         char[] letters = L[Character.getNumericValue(D.charAt(pos))];
+         for(int i=0; i<letters.length; i++) {
+            bfs(pos+1, len, new StringBuilder(sb).append(letters[i]), D);
          }
       }
-      return false;
    }
 
-   static boolean isValidMove(int[][] board, int x, int y) {
-      return x >= 0 && x < n && y >= 0 && y < n && board[x][y] == 0;
+   static int N = 8;
+   
+   public static boolean isSafe(int x, int y, int sol[][]) {
+      return(x >= 0 && x < N && y >= 0 && y < N && sol[x][y] == -1);
    }
+
+   public static boolean solveKT() {
+      int sol[][] = new int[8][8];
+      for(int x=0; x<N; x++)
+         for(int y=0; y<N; y++)
+            sol[x][y] = -1;
+      
+      int xMove[] = {2, 1, -1, -2, -2, -1, 1, 2};
+      int yMove[] = {1, 2, 2, 1, -1, -2, -2, -1};
+      
+      //As the Knight starts from cell(0,0)
+      sol[0][0] = 0;
+      
+      if(!solveKTUtil(0, 0, 1, sol, xMove, yMove)) { 
+         System.out.println("Solution does not exist");
+         return false;
+      } else printSolution(sol);
+      
+      return true;
+   }
+
+   public static boolean solveKTUtil(int x, int y, int movei, int sol[][], int xMove[], int yMove[]) {
+      int k, next_x, next_y;
+      if(movei == N * N)
+         return true;
+      for(k=0; k<8; k++) {
+         next_x = x + xMove[k];
+         next_y = y + yMove[k];
+         if(isSafe(next_x, next_y, sol)) {
+            sol[next_x][next_y] = movei;
+            if(solveKTUtil(next_x, next_y, movei+1, sol, xMove, yMove)) 
+               return true;
+            else sol[next_x][next_y] = -1;// backtracking
+            }
+         }
+         return false;
+      }
 
    public static void main(String[] args) {
       // // code 1 (rat in maze)
-      // if (solveRatMaze(0, 0)) {
-      //    showPath();
-      // } else {
-      //    System.out.println("There is no path");
-      // }
+      // int maze[][] = { 
+      //    {1, 0, 0, 0},
+      //    {1, 1, 0, 1},
+      //    {0, 1, 0, 0},
+      //    {1, 1, 1, 1}};
+      // solveMaze(maze);
 
       // // code 2 (phone combination)
-      // String digits = "23";
-      // String[] phone = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-      // backtrack(phone, digits, 0, "");
+      // letterCombinations("2");
 
       // // code 3 (Knight’s Tour)
-      // int[][] board = new int[n][n];
-      // if(!solveKnightTour(board, 0, 0, 1)) {
-      //     System.out.println("Solution does not exist");
-      // }else {
-      //    for(int i = 0; i < n; i++) {
-      //       for (int j = 0; j < n; j++) {
-      //          System.out.print(board[i][j] + " ");
-      //       }
-      //       System.out.println();
-      //    }
-      // }
+      // solveKT();
    }
 }
