@@ -230,26 +230,80 @@ public class JavaBasics25 {
 
     return true;
   }
+
+  public static boolean isCycle() {
+    Node slow = head;
+    Node fast = head;
+
+    while (fast != null && fast.next != null) {
+      slow = slow.next;
+      fast = fast.next.next;
+      if(slow == fast) {
+        return true;
+      }
+    }
+
+    return false;
+  }
   
+  public static void removeCycle() {
+    //detect cycle
+    Node slow = head;
+    Node fast = head;
+    boolean cycle = false;
+    while(fast != null && fast.next != null) {
+      slow = slow.next;
+      fast = fast.next.next;
+      if(fast == slow) {
+        cycle = true;
+        break;
+      }
+    }
+    if(cycle == false) {
+      return;
+    }
+
+    //find meeting point
+    slow = head;
+    Node prev = null;
+    while (slow != fast) {
+      prev = fast;
+      slow = slow.next;
+      fast = fast.next;
+    }
+
+    //remove cycle
+    prev.next = null;
+  }
+
   public static void main(String[] args) {
-    JavaBasics25 ll = new JavaBasics25();
-    ll.addFirst(2);
-    ll.addFirst(1);
-    ll.addLast(4);
-    ll.addLast(5);
-    ll.add(2, 3);
+    // JavaBasics25 ll = new JavaBasics25();
+    // ll.addFirst(2);
+    // ll.addFirst(1);
+    // ll.addLast(4);
+    // ll.addLast(5);
+    // ll.add(2, 3);
+    // // ll.print();
+    // // ll.removeFirst();
+    // // ll.print();
+    // // ll.removeLast();
+    // // System.out.println(ll.size);  
     // ll.print();
-    // ll.removeFirst();
+    // System.out.println(ll.itrSearch(3));
+    // System.out.println(ll.recSearch(10));
+    // ll.reverse();
     // ll.print();
-    // ll.removeLast();
-    // System.out.println(ll.size);  
-    ll.print();
-    System.out.println(ll.itrSearch(3));
-    System.out.println(ll.recSearch(10));
-    ll.reverse();
-    ll.print();
-    ll.deleteNthfromEnd(3);
-    ll.print();
-    System.out.println(ll.checkPalindrome());
+    // ll.deleteNthfromEnd(3);
+    // ll.print();
+    // System.out.println(ll.checkPalindrome());
+
+    head = new Node(1);
+    Node temp = new Node(2);
+    head.next = temp;
+    head.next.next = new Node(3);
+    head.next.next.next = temp;
+    System.out.println(isCycle());
+    removeCycle();
+    System.out.println(isCycle());
   }
 }
