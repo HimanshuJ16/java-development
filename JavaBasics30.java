@@ -110,7 +110,7 @@ public class JavaBasics30 {
         s.pop();
       }
       if(s.isEmpty()) {
-        nxtGreater[i] = -1
+        nxtGreater[i] = -1;
       } else {
         nxtGreater[i] = arr[s.peek()];
       }
