@@ -69,6 +69,8 @@ public class JavaBasics37 {
     int val[] = {60, 100, 120};
     int weight[] = {10, 20, 30};
     int W = 50;
-    fractionalKnapsack(val, weight, W);    
+    fractionalKnapsack(val, weight, W);   
+    
+    // CODE3
   }
 }
