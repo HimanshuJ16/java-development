@@ -115,7 +115,7 @@ public class JavaBasics37 {
 
     System.out.println("max length of chain = " + chainLen);
 
-    // CODE5
+    // CODE5 (Indian Coins Problem)
     Integer coins[] = {1, 2, 5, 10, 20, 50, 100, 200, 500};
 
     Arrays.sort(coins, Comparator.reverseOrder());
@@ -141,7 +141,7 @@ public class JavaBasics37 {
     }
     System.out.println();
 
-    // CODE6
+    // CODE6 (Job Sequencing Problem)
     int jobsInfo[][] = {{4, 20}, {1, 10}, {1, 40}, {1, 30}};
 
     ArrayList<Job> jobs = new ArrayList<>();
@@ -167,5 +167,43 @@ public class JavaBasics37 {
       System.out.print(seq.get(i) + " ");
     }
     System.out.println();
+
+    // CODE7 (Chocola Problem)
+    int n = 4, m = 6;
+    Integer costVer[] = {2, 1, 3, 1, 4};
+    Integer costHor[] = {4, 1, 2};
+
+    Arrays.sort(costVer, Collections.reverseOrder());
+    Arrays.sort(costHor, Collections.reverseOrder());
+
+    int h = 0, v = 0;
+    int hp = 1, vp = 1;
+    int cost = 0;
+
+    while (h < costHor.length && v < costVer.length) {
+      if (costVer[v] <= costHor[h]) {
+        cost += (costHor[h] * vp);
+        hp++;
+        h++;
+      } else {
+        cost += (costVer[v] * hp);
+        vp++;
+        v++;
+      }
+    }
+
+    while (h < costHor.length) {
+      cost += (costHor[h] * vp);
+      hp++;
+      h++;
+    }
+
+    while (v < costVer.length) {
+      cost += (costVer[v] * hp);
+      vp++;
+      v++;
+    }
+
+    System.out.println("min cost of cuts = " + cost);
   }
 }
