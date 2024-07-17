@@ -115,6 +115,21 @@ public class JavaBasics39 {
     int rightsum = sum(root.right);
     return leftsum + rightsum + root.data;
   }
+
+  public static int diameter(Node root) {
+    if (root == null) {
+      return 0;
+    }
+
+    int lefDiam = diameter(root.left);
+    int leftHt = height(root.left);
+    int rightDiam = diameter(root.right);
+    int rightHt = height(root.right);
+
+    int selfDiam = leftHt + rightHt + 1;
+
+    return Math.max(selfDiam, Math.max(rightDiam, lefDiam));
+  }
   public static void main(String[] args) {
     // // CODE1
     // int nodes[] = {1, 2, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1};
@@ -140,5 +155,6 @@ public class JavaBasics39 {
     System.out.println(height(root));
     System.out.println(count(root));
     System.out.println(sum(root));
+    System.out.println(diameter(root));
   }
 }
