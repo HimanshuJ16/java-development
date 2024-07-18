@@ -3,8 +3,7 @@ import java.util.*;
 public class JavaBasics39 {
   static class Node {
     int data;
-    Node left;
-    Node right;
+    Node left, right;
 
     Node(int data) {
       this.data = data;
@@ -130,6 +129,110 @@ public class JavaBasics39 {
 
     return Math.max(selfDiam, Math.max(rightDiam, lefDiam));
   }
+
+  static class Info {
+    int diam, ht;
+
+    public Info(int diam, int ht) {
+      this.diam = diam;
+      this.ht = ht;
+    }
+  }
+
+  public static Info diameter1(Node root) {
+    if (root == null) {
+      return new Info(0, 0);
+    }
+
+    Info leftInfo = diameter1(root.left);
+    Info rightInfo = diameter1(root.right);
+
+    int diam = Math.max(Math.max(leftInfo.diam, rightInfo.diam), leftInfo.ht + rightInfo.ht + 1);
+    int ht = Math.max(leftInfo.ht, rightInfo.ht) + 1;
+
+    return new Info(diam, ht);
+  }
+
+  public static boolean isIdentical(Node node, Node subRoot) {
+    if (node == null && subRoot == null) {
+      return true;
+    } else if (node == null || subRoot == null || node.data != subRoot.data) {
+      return false;
+    }
+
+    if (!isIdentical(node.left, subRoot.left)) {
+      return false;
+    }
+
+    if (!isIdentical(node.right, subRoot.right)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public static boolean isSubtree(Node root, Node subRoot) {
+    if (root == null) {
+      return false;
+    }
+    
+    if (root.data == subRoot.data) {
+      if (isIdentical(root, subRoot)) {
+        return true;
+      }
+    }
+
+    return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
+  }
+
+  static class InfoTopView {
+    Node node;
+    int hd;
+
+    public InfoTopView(Node node, int hd) {
+      this.node = node;
+      this.hd = hd;
+    }
+  }
+
+  public static void topView(Node root) {
+    Queue<InfoTopView> q = new LinkedList<>();
+    HashMap<Integer, Node> map = new HashMap<>();
+
+    int min = 0, max = 0;
+    q.add(new InfoTopView(root, 0));
+    q.add(null);
+
+    while (!q.isEmpty()) {
+      InfoTopView curr = q.remove();
+      if (curr == null) {
+        if (q.isEmpty()) {
+          break;
+        } else {
+          q.add(null);
+        }
+      } else {
+        if (!map.containsKey(curr.hd)) {
+          map.put(curr.hd, curr.node);
+        }
+  
+        if (curr.node.left != null) {
+          q.add(new InfoTopView(curr.node.left, curr.hd-1));
+          min = Math.min(min, curr.hd-1);
+        }
+  
+        if (curr.node.right != null) {
+          q.add(new InfoTopView(curr.node.right, curr.hd+1));
+          max = Math.max(max, curr.hd+1);
+        }
+      }     
+    }
+
+    for(int i=min; i<=max; i++) {
+      System.out.print(map.get(i).data + " ");
+    }
+    System.out.println();
+  }
   public static void main(String[] args) {
     // // CODE1
     // int nodes[] = {1, 2, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1};
@@ -156,5 +259,11 @@ public class JavaBasics39 {
     System.out.println(count(root));
     System.out.println(sum(root));
     System.out.println(diameter(root));
+    System.out.println(diameter1(root).diam);
+    Node subRoot = new Node(2);
+    subRoot.left  = new Node(4);
+    subRoot.right = new Node(5);
+    System.out.println(isSubtree(root, subRoot));
+    topView(root);
   }
 }
