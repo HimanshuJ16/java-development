@@ -104,7 +104,7 @@ public class JavaBasics45 {
     }
   }
 
-  public static void heapSort(int arr[]) {
+  public static void heapSort(int arr[]) { // O(nlogn)
     //step1 - build maxHeap
     int n = arr.length;
     for(int i=n/2; i>=0; i--) {
