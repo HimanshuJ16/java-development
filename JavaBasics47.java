@@ -57,7 +57,7 @@ public class JavaBasics47 {
       for(int i=0; i<oldBuck.length; i++) {
         LinkedList<Node> ll = oldBuck[i];
         for(int j=0; j<ll.size(); j++) {
-          Node node = ll.remove();
+          Node node = ll.get(j);
           put(node.key, node.value);
         }
       }
@@ -192,5 +192,18 @@ public class JavaBasics47 {
     // }
 
     // System.out.println(hm.get("India"));
+
+    // // CODE4
+    // LinkedHashMap<String, Integer> lhm = new LinkedHashMap<>();
+    // lhm.put("India", 100);
+    // lhm.put("China", 150);
+    // lhm.put("US", 50);
+    // System.out.println(lhm);
+
+    // TreeMap<String, Integer> tm = new TreeMap<>();
+    // tm.put("India", 100);
+    // tm.put("China", 150);
+    // tm.put("US", 50);
+    // System.out.println(tm);
   }
 }
