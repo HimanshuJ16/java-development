@@ -17,5 +17,44 @@ public class JavaBasics49 {
     // System.out.println(set.isEmpty());
 
     // // CODE2
+    HashSet<String> cities = new HashSet<>();
+    cities.add("Delhi");
+    cities.add("Mumbai");
+    cities.add("Noida");
+    cities.add("Bangalore");
+    System.out.println(cities);
+
+    // Iterator it = cities.iterator();
+    // while (it.hasNext()) {
+    //   System.out.println(it.next());
+    // }
+
+    // for(String city : cities) {
+    //   System.out.println(city);
+    // }
+
+    LinkedHashSet<String> lhs = new LinkedHashSet<>();
+    lhs.add("Delhi");
+    lhs.add("Mumbai");
+    lhs.add("Noida");
+    lhs.add("Bangalore");
+    System.out.println(lhs);
+
+    TreeSet<String> ts = new TreeSet<>();
+    ts.add("Delhi");
+    ts.add("Mumbai");
+    ts.add("Noida");
+    ts.add("Bangalore");
+    System.out.println(ts);
+
+    // // CODE3
+    int num[] = {4, 3, 2, 5, 6, 7, 3, 4, 2, 1};
+    HashSet<Integer> set = new HashSet<>();
+
+    for(int i=0; i<num.length; i++) {
+      set.add(num[i]);
+    }
+
+    System.out.println("ans = " + set.size());
   }
 }
