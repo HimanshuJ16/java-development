@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class JavaBasics51 {
   static class Node {
     Node children[] = new Node[26];
@@ -123,6 +125,30 @@ public class JavaBasics51 {
       }
     }
   }
+  
+  public static String findLongestWord(String[] words) {
+    String longestWord = "";
+    for (String word : words) {
+      if (isValidWord(word)) {
+        if (word.length() > longestWord.length() ||
+          (word.length() == longestWord.length() && word.compareTo(longestWord) < 0)) {
+          longestWord = word;
+        }
+      }
+    }
+    return longestWord;
+  }
+
+  public static boolean isValidWord(String word) {
+    Node current = root;
+    for (char ch : word.toCharArray()) {
+      if (current.children[ch - 'a'] == null || !current.children[ch - 'a'].eow) {
+        return false;
+      }
+      current = current.children[ch - 'a'];
+    }
+    return true;
+  }
   public static void main(String[] args) {
     // // CODE1
     // String words[] = {"the", "a", "there", "their", "any", "thee"};
@@ -172,5 +198,12 @@ public class JavaBasics51 {
     // }
     // longestWord(root, new StringBuilder(""));
     // System.out.println(ans);
+
+    // // CODE7
+    // String[] input1 = {"w", "wo", "wor", "worl", "world"};
+    // for(int i=0; i<input1.length; i++) {
+    //   insert(input1[i]);
+    // }
+    // System.out.println(findLongestWord(input1));
   }
 }
