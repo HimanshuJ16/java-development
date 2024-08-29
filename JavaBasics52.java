@@ -1,7 +1,5 @@
 import java.util.*;
 
-import JavaBasics36.cell;
-
 public class JavaBasics52 {
   static class Edge {
     int src;
