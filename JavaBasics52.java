@@ -1,5 +1,7 @@
 import java.util.*;
 
+import JavaBasics36.cell;
+
 public class JavaBasics52 {
   static class Edge {
     int src;
@@ -60,6 +62,34 @@ public class JavaBasics52 {
       }
     }
   }
+
+  public static void dfs(ArrayList<Edge>[] graph, int curr, boolean vis[]) {
+    System.out.print(curr + " ");
+    vis[curr] = true;
+
+    for(int i=0; i<graph[curr].size(); i++) {
+      Edge e = graph[curr].get(i);
+      if (!vis[e.dest]) {
+        dfs(graph, e.dest, vis);
+      }
+    }
+  }
+
+  public static boolean hasPath(ArrayList<Edge>[] graph, int src, int dest, boolean vis[]) {
+    if (src == dest) {
+      return true;
+    }
+
+    vis[src] = true;
+    for(int i=0; i<graph[src].size(); i++) {
+      Edge e = graph[src].get(i);
+      if (!vis[e.dest] && hasPath(graph, e.dest, dest, vis)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
   public static void main(String[] args) {
     // // CODE1
     // /*
@@ -117,12 +147,13 @@ public class JavaBasics52 {
     //         2-----4  
     // */
 
-    // int V = 7;
-    // ArrayList<Edge> graph[] = new ArrayList[V];
-    // createGraph(graph);
-    // bfs(graph);
-
-    // // CODE3
-    
+    int V = 7;
+    ArrayList<Edge> graph[] = new ArrayList[V];
+    createGraph(graph);
+    bfs(graph);
+    System.out.println();
+    dfs(graph, 0, new boolean[V]);
+    System.out.println();
+    System.out.println(hasPath(graph, 0, 5, new boolean[V]));
   }
 }
