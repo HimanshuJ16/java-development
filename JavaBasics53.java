@@ -53,6 +53,36 @@ public class JavaBasics53 {
     graph[4].add(new Edge(4, 3));
   }
 
+  static void createGraph2(ArrayList<Edge> graph[]) {
+    for(int i=0; i<graph.length; i++) {
+      graph[i] = new ArrayList<>();
+    }
+
+    graph[0].add(new Edge(0, 2));
+
+    graph[1].add(new Edge(1, 0));
+
+    graph[2].add(new Edge(2, 3));
+
+    graph[3].add(new Edge(3, 0));
+  }
+
+  static void createGraph3(ArrayList<Edge> graph[]) {
+    for(int i=0; i<graph.length; i++) {
+      graph[i] = new ArrayList<>();
+    }
+
+    graph[2].add(new Edge(2, 3));
+
+    graph[3].add(new Edge(3, 1));
+ 
+    graph[4].add(new Edge(4, 0));
+    graph[4].add(new Edge(4, 1));
+
+    graph[5].add(new Edge(5, 0));
+    graph[5].add(new Edge(5, 2));
+  }
+
   public static boolean detectCycle(ArrayList<Edge>[] graph) {
     boolean vis[] = new boolean[graph.length];
     for(int i=0; i<graph.length; i++) {
@@ -113,6 +143,68 @@ public class JavaBasics53 {
 
     return true;
   }
+
+  public static boolean isCycle(ArrayList<Edge>[] graph) {
+    boolean vis[] = new boolean[graph.length];
+    boolean stack[] = new boolean[graph.length];
+
+    for(int i=0; i<graph.length; i++) {
+      if (!vis[i]) {
+        if (isCycleUtil(graph, i, vis, stack)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  public static boolean isCycleUtil(ArrayList<Edge>[] graph, int curr, boolean vis[], boolean stack[]) {
+    vis[curr] = true;
+    stack[curr] = true;
+
+    for(int i=0; i<graph[curr].size(); i++) {
+      Edge e = graph[curr].get(i);
+      if (stack[e.dest]) {
+        return true;
+      } 
+      if (!vis[e.dest] && isCycleUtil(graph, e.dest, vis, stack)) {
+        return true;
+      }
+    }
+
+    stack[curr] = false;
+    return false;
+  }
+
+  public static void topologicalSort(ArrayList<Edge>[] graph) {
+    boolean vis[] = new boolean[graph.length];
+    Stack<Integer> s = new Stack<>();
+
+    for(int i=0; i<graph.length; i++) {
+      if (!vis[i]) {
+        topologicalSortUtil(graph, i, vis, s);        
+      }
+    }
+
+    while (!s.isEmpty()) {
+      System.out.print(s.pop() + " ");
+    }
+  }
+
+  public static void topologicalSortUtil(ArrayList<Edge>[] graph, int curr, boolean vis[], Stack<Integer> s) {
+    vis[curr] = true;
+
+    for(int i=0; i<graph[curr].size(); i++) {
+      Edge e = graph[curr].get(i);
+      if (!vis[e.dest]) {
+        topologicalSortUtil(graph, e.dest, vis, s);
+      }
+    }
+
+    s.push(curr);
+  }
+
   public static void main(String[] args) {
     // // CODE1
     // /*       
@@ -131,19 +223,31 @@ public class JavaBasics53 {
     // System.out.println(detectCycle(graph));
 
     // // CODE2
-    /*
-            0------2
-           /      /
-          /      /
-         1      4
-          \    /
-           \  /
-             3
-    */
+    // /*
+    //         0------2
+    //        /      /
+    //       /      /
+    //      1      4
+    //       \    /
+    //        \  /
+    //          3
+    // */
 
-    int V = 5;
-    ArrayList<Edge> graph[] = new ArrayList[V];
-    createGraph1(graph);
-    System.out.println(isBipartite(graph));
+    // int V = 5;
+    // ArrayList<Edge> graph[] = new ArrayList[V];
+    // createGraph1(graph);
+    // System.out.println(isBipartite(graph));
+
+    // // CODE3
+    // int V = 4;
+    // ArrayList<Edge> graph[] = new ArrayList[V];
+    // createGraph2(graph);
+    // System.out.println(isCycle(graph));
+
+    // // CODE4
+    // int V = 6;
+    // ArrayList<Edge> graph[] = new ArrayList[V];
+    // createGraph3(graph);
+    // topologicalSort(graph);
   }
 }
