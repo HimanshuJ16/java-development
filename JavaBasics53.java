@@ -83,6 +83,24 @@ public class JavaBasics53 {
     graph[5].add(new Edge(5, 2));
   }
 
+  static void createGraph4(ArrayList<Edge> graph[]) {
+    for(int i=0; i<graph.length; i++) {
+      graph[i] = new ArrayList<>();
+    }
+
+    graph[0].add(new Edge(0, 3));
+
+    graph[2].add(new Edge(2, 3));
+
+    graph[3].add(new Edge(3, 1));
+ 
+    graph[4].add(new Edge(4, 0));
+    graph[4].add(new Edge(4, 1));
+
+    graph[5].add(new Edge(5, 0));
+    graph[5].add(new Edge(5, 2));
+  }
+
   public static boolean detectCycle(ArrayList<Edge>[] graph) {
     boolean vis[] = new boolean[graph.length];
     for(int i=0; i<graph.length; i++) {
@@ -205,6 +223,54 @@ public class JavaBasics53 {
     s.push(curr);
   }
 
+  public static void calcIndeg(ArrayList<Edge> graph[], int indeg[]) {
+    for(int i=0; i<graph.length; i++) {
+      int v = i;
+      for(int j=0; j<graph[v].size(); j++) {
+        Edge e = graph[v].get(j);
+        indeg[e.dest]++;
+      }
+    }
+  }
+
+  public static void topologicalSortBFS(ArrayList<Edge> graph[]) {
+    int indeg[] = new int[graph.length];
+    calcIndeg(graph, indeg);
+    Queue<Integer> q = new LinkedList<>();
+
+    for(int i=0; i<indeg.length; i++) {
+      if (indeg[i] == 0) {
+        q.add(i);
+      }
+    }
+
+    while (!q.isEmpty()) {
+      int curr = q.remove();
+      System.out.print(curr + " ");
+
+      for(int i=0; i<graph[curr].size(); i++) {
+        Edge e = graph[curr].get(i);
+        indeg[e.dest]--;
+        if (indeg[e.dest] == 0) {
+          q.add(e.dest);
+        }
+      }
+    }
+
+    System.out.println();
+  }
+
+  public static void printAllPath(ArrayList<Edge> graph[], int src, int dest, String path) {
+    if (src == dest) {
+      System.out.println(path + dest);
+      return;
+    }
+
+    for(int i=0; i<graph[src].size(); i++) {
+      Edge e = graph[src].get(i);
+      printAllPath(graph, e.dest, dest, path + src);
+    }
+  }
   public static void main(String[] args) {
     // // CODE1
     // /*       
@@ -244,10 +310,19 @@ public class JavaBasics53 {
     // createGraph2(graph);
     // System.out.println(isCycle(graph));
 
-    // // CODE4
+    // CODE4
     // int V = 6;
     // ArrayList<Edge> graph[] = new ArrayList[V];
     // createGraph3(graph);
     // topologicalSort(graph);
+    // System.out.println();
+    // topologicalSortBFS(graph);
+
+    // // CODE5
+    // int V = 6;
+    // int src = 5, dest = 1;
+    // ArrayList<Edge> graph[] = new ArrayList[V];
+    // createGraph4(graph);
+    // printAllPath(graph, src, dest, "");
   }
 }
