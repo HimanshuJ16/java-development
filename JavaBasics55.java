@@ -210,9 +210,9 @@ public class JavaBasics55 {
     // bellmanFord(graph, 0, V);
 
     // // CODE3
-    int V = 4;
-    ArrayList<Edge> graph[] = new ArrayList[V];
-    createGraph3(graph);
-    prims(graph);  
+    // int V = 4;
+    // ArrayList<Edge> graph[] = new ArrayList[V];
+    // createGraph3(graph);
+    // prims(graph);  
   }
 }
