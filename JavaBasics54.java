@@ -32,6 +32,55 @@ public class JavaBasics54 {
     graph[4].add(new Edge(4, 5, 5));
   }
 
+  static void createGraph1(ArrayList<Edge> graph[]) {
+    for(int i=0; i<graph.length; i++) {
+      graph[i] = new ArrayList<>();
+    }
+
+    graph[0].add(new Edge(0, 1, 2));
+    graph[0].add(new Edge(0, 2, 4));
+
+    graph[1].add(new Edge(1, 2, -4));
+
+    graph[2].add(new Edge(2, 3, 2));
+
+    graph[3].add(new Edge(3, 4, 4));
+ 
+    graph[4].add(new Edge(4, 1, -1));
+  }
+
+  static void createGraph2(ArrayList<Edge> graph) {
+    graph.add(new Edge(0, 1, 2));
+    graph.add(new Edge(0, 2, 4));
+
+    graph.add(new Edge(1, 2, -4));
+
+    graph.add(new Edge(2, 3, 2));
+
+    graph.add(new Edge(3, 4, 4));
+ 
+    graph.add(new Edge(4, 1, -1));
+  }
+
+  static void createGraph3(ArrayList<Edge> graph[]) {
+    for(int i=0; i<graph.length; i++) {
+      graph[i] = new ArrayList<>();
+    }
+
+    graph[0].add(new Edge(0, 1, 10));
+    graph[0].add(new Edge(0, 2, 15));
+    graph[0].add(new Edge(0, 3, 30));
+
+    graph[1].add(new Edge(1, 0, 10));
+    graph[1].add(new Edge(1, 3, 40));
+
+    graph[2].add(new Edge(2, 0, 15));
+    graph[2].add(new Edge(2, 3, 50));
+
+    graph[3].add(new Edge(3, 1, 40));
+    graph[3].add(new Edge(3, 2, 50));
+  }
+
   static class Pair implements Comparable<Pair> {
     int n;
     int path;
@@ -370,6 +419,69 @@ public class JavaBasics54 {
     
     return 0;
   }
+
+  public static void bellmanFord(ArrayList<Edge> graph, int src, int V) {
+    int dist[] = new int[V];
+    for(int i=0; i<dist.length; i++) {
+      if (i != src) {
+        dist[i] = Integer.MAX_VALUE;
+      }
+    }
+
+    for(int i=0; i<V-1; i++) {
+      for(int j=0; j<graph.size(); j++) {
+        Edge e = graph.get(j);
+        int u = e.src;
+        int v = e.dest;
+        int wt = e.wt;
+        if (dist[u] != Integer.MAX_VALUE && dist[u] + wt < dist[v]) {
+          dist[v] = dist[u] + wt;
+        }
+      }
+    }
+
+    for(int i=0; i<dist.length; i++) {
+      System.out.print(dist[i] + " ");
+    }
+    System.out.println();
+  }
+  
+  static class Pair1 implements Comparable<Pair1> {
+    int v;
+    int cost;
+
+    public Pair1(int v, int c) {
+      this.v = v;
+      this.cost = c;
+    }
+
+    @Override
+    public int compareTo(Pair1 p2) {
+      return this.cost - p2.cost;
+    }
+  }
+
+  public static void prims(ArrayList<Edge> graph[]) { // O(ElogE)
+    boolean vis[] = new boolean[graph.length];
+    PriorityQueue<Pair1> pq = new PriorityQueue<>();
+    pq.add(new Pair1(0, 0));
+    int finalCost = 0;
+
+    while (!pq.isEmpty()) {
+      Pair1 curr = pq.remove();
+      if (!vis[curr.v]) {
+        vis[curr.v] = true;
+        finalCost += curr.cost;
+
+        for(int i=0; i<graph[curr.v].size(); i++) {
+          Edge e = graph[curr.v].get(i);
+          pq.add(new Pair1(e.dest, e.wt));
+        }
+      }
+    }
+
+    System.out.println("final(min) cost of MST : " + finalCost);
+  }
   public static void main(String[] args) {
     // // CODE1
     // int V = 6;
@@ -385,12 +497,10 @@ public class JavaBasics54 {
     // for(int i=0; i<4; i++) {
     //   adj[i] = new ArrayList<Integer>();
     // }
-    
     // addEdge(adj, 0, 1);
     // addEdge(adj, 1, 2);
     // addEdge(adj, 2, 0);
     // addEdge(adj, 2, 3);
-    
     // if (isCyclicDisconntected(adj, V)) {
     //   System.out.println("Yes");
     // } else {
@@ -412,7 +522,6 @@ public class JavaBasics54 {
     //   {1, 0, 0, 2, 1}
     // };
     // int ans = Solution(arr);
-    
     // if (ans == -1) {
     //   System.out.println("All oranges cannot rot");
     // } else {
@@ -441,5 +550,18 @@ public class JavaBasics54 {
     // String start = "toon";
     // String target = "plea";
     // System.out.print("Length of shortest chain is: "+ shortestChainLen(start, target, D));
+
+    // // CODE7
+    // int V = 5;
+    // // ArrayList<Edge> graph[] = new ArrayList[V];
+    // ArrayList<Edge> graph = new ArrayList<>();
+    // createGraph2(graph);
+    // bellmanFord(graph, 0, V);
+
+    // // CODE8
+    int V = 4;
+    ArrayList<Edge> graph[] = new ArrayList[V];
+    createGraph3(graph);
+    prims(graph);
   }
 }
