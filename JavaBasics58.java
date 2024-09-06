@@ -66,6 +66,92 @@ public class JavaBasics58 {
       return dp[n][W] = knapsack(val, wt, W, n-1, dp);
     }
   }
+
+  public static void print(int dp[][]) {
+    for (int i = 0; i < dp.length; i++) {
+      for (int j = 0; j < dp[0].length; j++) {
+        System.out.print(dp[i][j] + " ");
+      }
+      System.out.println();
+    }
+    System.out.println();
+  }
+
+  public static int knapsackTabulation(int val[], int wt[], int W, int n) {
+    int dp[][] = new int[n+1][W+1];
+    for (int i = 0; i <= n; i++) {
+      for (int j = 0; j <= W; j++) {
+        if (i == 0 || j == 0) {
+          dp[i][j] = 0;
+        } else if (wt[i-1] <= j) {
+          dp[i][j] = Math.max(val[i-1] + dp[i-1][j-wt[i-1]], dp[i-1][j]);
+        } else {
+          dp[i][j] = dp[i-1][j];
+        }
+      }
+    }
+    print(dp);
+    return dp[n][W];
+  }
+
+  public static void print1(boolean dp[][]) {
+    for (int i = 0; i < dp.length; i++) {
+      for (int j = 0; j < dp[0].length; j++) {
+        System.out.print(dp[i][j] + " ");
+      }
+      System.out.println();
+    }
+    System.out.println();
+  }
+
+  public static boolean targetSumSubset(int arr[], int sum) { 
+    int n = arr.length;
+    boolean dp[][] = new boolean[n+1][sum+1];
+    for(int i=0; i<=n; i++) {
+      for(int j=0; j<=sum; j++) {
+        if(i==0) {
+          dp[i][j] = false;
+        }
+        if(j==0) {
+          dp[i][j] = true;
+        }
+      }
+    }
+
+    for(int i=1; i<=n; i++) {
+      for(int j=1; j<=sum; j++) {
+        if(arr[i-1] <= j) {
+          dp[i][j] = dp[i-1][j-arr[i-1]] || dp[i-1][j];
+        } else {
+          dp[i][j] = dp[i-1][j];
+        }
+      }
+    }
+
+    print1(dp);
+    return dp[n][sum];
+  }
+
+  public static int unboundedKnapsack(int val[], int wt[], int W) {
+    int n = val.length;
+    int dp[][] = new int[n+1][W+1];
+
+    for(int i=0; i<=n; i++) {
+      for(int j=0; j<=W; j++) {
+        if(i==0 || j==0) {
+          dp[i][j] = 0; 
+        } else if(wt[i-1] <= j) {
+          dp[i][j] = Math.max(val[i-1] + dp[i][j-wt[i-1]], dp[i-1][j]);
+        } else {
+          dp[i][j] = dp[i-1][j];
+        }
+      }
+    }
+
+    print(dp);
+    return dp[n][W];
+  }
+
   public static void main(String[] args) {
     // // CODE1
     // int n = 5;
@@ -81,15 +167,27 @@ public class JavaBasics58 {
     // countWaysTabulation(n);
 
     // // CODE3
+    // int val[] = {15, 14, 10, 45, 30};
+    // int weight[] = {2, 5, 1, 3, 4};
+    // int W = 7;
+    // int dp[][] = new int[val.length+1][W+1];
+    // for(int i=0; i<dp.length; i++) {
+    //   for(int j=0; j<dp[0].length; j++) {
+    //     dp[i][j] = -1;
+    //   }
+    // }
+    // System.out.println(knapsack(val, weight, W, val.length, dp));
+    // System.out.println(knapsackTabulation(val, weight, W, val.length));
+  
+    // // CODE4
+    // int arr[] = {4, 2, 7, 1, 3};
+    // int sum = 10;
+    // System.out.println(targetSumSubset(arr, sum));
+
+    // // CODE5
     int val[] = {15, 14, 10, 45, 30};
     int weight[] = {2, 5, 1, 3, 4};
     int W = 7;
-    int dp[][] = new int[val.length+1][W+1];
-    for(int i=0; i<dp.length; i++) {
-      for(int j=0; j<dp[0].length; j++) {
-        dp[i][j] = -1;
-      }
-    }
-    System.out.println(knapsack(val, weight, W, val.length, dp));
+    System.out.println(unboundedKnapsack(val, weight, W));
   }
 }
