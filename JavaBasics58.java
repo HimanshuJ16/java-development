@@ -152,6 +152,95 @@ public class JavaBasics58 {
     return dp[n][W];
   }
 
+  public static int coinChange(int[] coins, int sum) {
+    int n = coins.length;
+    int dp[][] = new int[n+1][sum+1];
+    for(int i=0; i<n+1; i++) {
+      dp[i][0] = 1;
+    }
+    for(int i=1; i<n+1; i++) {
+      dp[0][i] = 0;
+    }
+
+    for(int i=1; i<n+1; i++) {
+      for(int j=1; j<sum+1; j++) {
+        if(coins[i-1] <= j) {
+          dp[i][j] = dp[i][j-coins[i-1]] + dp[i-1][j];
+        } else {
+          dp[i][j] = dp[i-1][j];
+        }
+      }
+    }
+
+    print(dp);
+    return dp[n][sum];
+  }
+
+  public static int rodCutting(int length[], int price[], int totRod) {
+    int n = price.length;
+    int dp[][] = new int[n+1][totRod+1];
+    for(int i=0; i<n+1; i++) {
+      for(int j=0; j<totRod+1; j++) {
+        if(i==0 || j==0) {
+          dp[i][j] = 0;
+        } else if(length[i-1] <= j) {
+          dp[i][j] = Math.max(price[i-1] + dp[i][j-length[i-1]], dp[i-1][j]);
+        } else {
+          dp[i][j] = dp[i-1][j];
+        }
+      }
+    }
+
+    print(dp);
+    return dp[n][totRod];
+  }
+
+  public static int lcs(String s1, String s2, int n, int m) {
+    if (n == 0 || m == 0) {
+      return 0;
+    }
+
+    if (s1.charAt(n - 1) == s2.charAt(m - 1)) {
+      return 1 + lcs(s1, s2, n - 1, m - 1);
+    } else {
+      return Math.max(lcs(s1, s2, n, m - 1), lcs(s1, s2, n - 1, m));
+    }
+  }
+
+  public static int lcsMemoization(String s1, String s2, int n, int m, int dp[][]) {
+    if (n == 0 || m == 0) {
+      return 0;
+    }
+
+    if (dp[n][m] != -1) {
+      return dp[n][m];
+    }
+
+    if (s1.charAt(n - 1) == s2.charAt(m - 1)) {
+      return dp[n][m] = 1 + lcsMemoization(s1, s2, n - 1, m - 1, dp);
+    } else {
+      return dp[n][m] = Math.max(lcsMemoization(s1, s2, n, m - 1, dp), lcsMemoization(s1, s2, n - 1, m, dp));
+    }
+  }
+
+  public static int lcsTabulation(String s1, String s2, int n, int m) {
+    int dp[][] = new int[n+1][m+1];
+    for(int i=0; i<n+1; i++) {
+      for(int j=0; j<m+1; j++) {
+        if(i==0 || j==0) {
+          dp[i][j] = 0;
+        } else if(s1.charAt(i-1) == s2.charAt(j-1)) {
+          dp[i][j] = 1 + dp[i-1][j-1];
+        } else {
+          dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+        }
+      }
+    }
+
+    print(dp);
+    return dp[n][m];
+  }
+
   public static void main(String[] args) {
     // // CODE1
     // int n = 5;
@@ -185,9 +274,33 @@ public class JavaBasics58 {
     // System.out.println(targetSumSubset(arr, sum));
 
     // // CODE5
-    int val[] = {15, 14, 10, 45, 30};
-    int weight[] = {2, 5, 1, 3, 4};
-    int W = 7;
-    System.out.println(unboundedKnapsack(val, weight, W));
+    // int val[] = {15, 14, 10, 45, 30};
+    // int weight[] = {2, 5, 1, 3, 4};
+    // int W = 7;
+    // System.out.println(unboundedKnapsack(val, weight, W));
+  
+    // // CODE6
+    // int coins[] = {1, 2, 3};
+    // int sum = 4;
+    // System.out.println(coinChange(coins, sum));
+
+    // // CODE7
+    // int length[] = {1, 2, 3, 4, 5, 6, 7, 8};
+    // int price[] = {1, 5, 8, 9, 10, 17, 17, 20};
+    // int totRod = 8;
+    // System.out.println(rodCutting(length, price, totRod));
+  
+    // // CODE8
+    String str1 = "abcdge";
+    String str2 = "abedg";
+    int dp[][] = new int[str1.length()+1][str2.length()+1];
+    for(int i=0; i<str1.length()+1; i++) {
+      for(int j=0; j<str2.length()+1; j++) {
+        dp[i][j] = -1;
+      }
+    }
+    System.out.println(lcs(str1, str2, str1.length(), str2.length()));
+    System.out.println(lcsMemoization(str1, str2, str1.length(), str2.length(), dp));
+    System.out.println(lcsTabulation(str1, str2, str1.length(), str2.length()));
   }
 }
