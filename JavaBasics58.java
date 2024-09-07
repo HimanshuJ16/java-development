@@ -435,6 +435,97 @@ public class JavaBasics58 {
     return dp[n];
   }
 
+  public static int mcm(int[] arr, int i, int j) {
+    if(i >= j) {
+      return 0;
+    }
+    int ans = Integer.MAX_VALUE;
+    for(int k=i; k<j; k++) {
+      int temp = mcm(arr, i, k) + mcm(arr, k+1, j) + arr[i-1] * arr[k] * arr[j];
+      ans = Math.min(ans, temp);
+    }
+    return ans;
+  }
+
+  public static int mcmMemoization(int[] arr, int i, int j, int[][] dp) {
+    if(i >= j) {
+      return 0;
+    }
+    if(dp[i][j] != -1) {
+      return dp[i][j];
+    }
+    int ans = Integer.MAX_VALUE;
+    for(int k=i; k<j; k++) {
+      int temp = mcmMemoization(arr, i, k, dp) + mcmMemoization(arr, k+1, j, dp) + arr[i-1] * arr[k] * arr[j];
+      ans = Math.min(ans, temp);
+    }
+    return dp[i][j] = ans;
+  }
+
+  public static int mcmTabulation(int[] arr) {
+    int n = arr.length;
+    int dp[][] = new int[n][n];
+    for(int i=0; i<n; i++) {
+      dp[i][i] = 0;
+    }
+    for(int i=n-1; i>=1; i--) {
+      for(int j=i+1; j<n; j++) {
+        int ans = Integer.MAX_VALUE;
+        for(int k=i; k<j; k++) {
+          int temp = dp[i][k] + dp[k+1][j] + arr[i-1] * arr[k] * arr[j];
+          ans = Math.min(ans, temp);
+        }
+        dp[i][j] = ans;
+      }
+    }
+
+    print(dp);
+    return dp[1][n-1];
+  }
+
+  public static int minPartition(int[] arr) {
+    int n = arr.length;
+    int sum = 0;
+    for(int i=0; i<arr.length; i++) {
+      sum += arr[i];
+    }
+
+    int W = sum/2;
+    int dp[][] = new int[n+1][W+1];
+    
+    for(int i=1; i<n+1; i++) {
+      for(int j=1; j<W+1; j++) {
+        if(arr[i-1] <= j) {
+          dp[i][j] = Math.max(arr[i-1] + dp[i-1][j-arr[i-1]], dp[i-1][j]);
+        } else {
+          dp[i][j] = dp[i-1][j];
+        }
+      }
+    }
+
+    int sum1 = dp[n][W];
+    int sum2 = sum - sum1;
+    return Math.abs(sum1 - sum2);
+  }
+  
+  public static int minJumps(int[] arr) {
+    int n = arr.length;
+    int dp[] = new int[n];
+    Arrays.fill(dp, Integer.MAX_VALUE);
+    dp[0] = 0;
+    for(int i=1; i<n; i++) {
+      for(int j=0; j<i; j++) {
+        if(arr[j] + j >= i) {
+          dp[i] = Math.min(dp[i], dp[j] + 1);
+        }
+      }
+    }
+    for(int i=0; i<dp.length; i++) {
+      System.out.print(dp[i] + " ");
+    }
+    return dp[n-1];
+  }
+
   public static void main(String[] args) {
     // // CODE1
     // int n = 5;
@@ -529,7 +620,26 @@ public class JavaBasics58 {
     // System.out.println(countBST(n));
 
     // // CODE15
-    int n = 4;
-    System.out.println(mountainRanges(n));
+    // int n = 4;
+    // System.out.println(mountainRanges(n));
+
+    // // CODE16
+    // int arr[] = {1, 2, 3, 4, 3};
+    // int n = arr.length;    
+    // int dp[][] = new int[n][n];
+    // for(int i=0; i<n; i++) {
+    //   Arrays.fill(dp[i], -1);
+    // }
+    // System.out.println(mcm(arr, 1, n-1));
+    // System.out.println(mcmMemoization(arr, 1, n-1, dp));
+    // System.out.println(mcmTabulation(arr));
+
+    // // CODE17
+    // int nums[] = {1, 6, 11, 5};
+    // System.out.println(minPartition(nums));
+
+    // // CODE18
+    // int arr[] = {2, 3, 1, 1, 4};
+    // System.out.println(minJumps(arr));
   }
 }
